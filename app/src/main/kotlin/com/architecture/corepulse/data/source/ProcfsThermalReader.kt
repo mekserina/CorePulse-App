@@ -17,7 +17,9 @@ class ProcfsThermalReader {
     suspend fun readThermalTelemetry(): ThermalTelemetry = withContext(Dispatchers.IO) {
         var temp: Float = 0f
         
+        var found = false
         for (path in thermalPaths) {
+            if (found) break
             try {
                 val file = File(path)
                 if (file.exists()) {
@@ -27,12 +29,14 @@ class ProcfsThermalReader {
                             val rawTemp = content.trim().toLong()
                             // Thermal values are usually in milli-Celsius
                             temp = if (rawTemp > 1000) rawTemp / 1000f else rawTemp.toFloat()
-                            if (temp > 0) break 
+                            if (temp > 0) {
+                                found = true
+                            }
                         }
                     }
                 }
             } catch (e: Exception) {
-                continue
+                // Skip this path
             }
         }
 
