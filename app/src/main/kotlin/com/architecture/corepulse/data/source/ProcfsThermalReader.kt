@@ -6,13 +6,13 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.RandomAccessFile
 
-class ProcfsThermalReader {
-    // Common thermal zone paths on Android
-    private val thermalPaths = listOf(
+class ProcfsThermalReader(
+    private val thermalPaths: List<String> = listOf(
         "/sys/class/thermal/thermal_zone0/temp",
         "/sys/class/thermal/thermal_zone1/temp",
         "/sys/class/thermal/thermal_zone7/temp" // Often SoC on some vendors
     )
+) {
 
     suspend fun readThermalTelemetry(): ThermalTelemetry = withContext(Dispatchers.IO) {
         var temp: Float = 0f
