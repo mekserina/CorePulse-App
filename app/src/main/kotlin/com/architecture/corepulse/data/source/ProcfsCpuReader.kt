@@ -1,9 +1,12 @@
 package com.architecture.corepulse.data.source
 
+import android.util.Log
 import com.architecture.corepulse.data.model.CpuTelemetry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.RandomAccessFile
+
+private const val TAG = "ProcfsCpuReader"
 
 class ProcfsCpuReader {
     private var lastTotal: Long = 0
@@ -45,7 +48,7 @@ class ProcfsCpuReader {
                 }
             }
         } catch (e: Exception) {
-            // Log in production
+            Log.w(TAG, "Failed to read /proc/stat", e)
         }
 
         CpuTelemetry(totalUsagePercent = totalUsage)
