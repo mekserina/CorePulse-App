@@ -1,10 +1,13 @@
 package com.architecture.corepulse.data.source
 
+import android.util.Log
 import com.architecture.corepulse.data.model.MemoryTelemetry
 import com.architecture.corepulse.data.util.ZeroAllocParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.RandomAccessFile
+
+private const val TAG = "ProcfsMemoryReader"
 
 class ProcfsMemoryReader {
     private val buffer = ByteArray(2048) // Memory info is usually small
@@ -22,7 +25,7 @@ class ProcfsMemoryReader {
                 }
             }
         } catch (e: Exception) {
-            // Log in production
+            Log.w(TAG, "Failed to read /proc/meminfo", e)
         }
 
         val used = if (total >= available) total - available else 0

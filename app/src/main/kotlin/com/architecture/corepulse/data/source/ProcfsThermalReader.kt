@@ -1,10 +1,13 @@
 package com.architecture.corepulse.data.source
 
+import android.util.Log
 import com.architecture.corepulse.data.model.ThermalTelemetry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.RandomAccessFile
+
+private const val TAG = "ProcfsThermalReader"
 
 class ProcfsThermalReader {
     // Common thermal zone paths on Android
@@ -36,7 +39,7 @@ class ProcfsThermalReader {
                     }
                 }
             } catch (e: Exception) {
-                // Skip this path
+                Log.w(TAG, "Failed to read thermal zone: $path", e)
             }
         }
 
